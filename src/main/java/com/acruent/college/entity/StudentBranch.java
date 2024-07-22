@@ -6,6 +6,9 @@ import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,10 +40,12 @@ public class StudentBranch
     @Column(name = "BRANCH_NAME", nullable = false)
     private String branchName;
     
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "COLLEGE_ID", nullable = false)
     private CollegeNames college;
     
+    @JsonManagedReference
     @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Student> students;
 

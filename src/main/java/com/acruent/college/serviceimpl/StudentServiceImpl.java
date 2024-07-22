@@ -5,8 +5,11 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.acruent.college.appconstants.AppConstants;
 import com.acruent.college.entity.Student;
 import com.acruent.college.entity.StudentBranch;
+import com.acruent.college.globalexceptionhandle.NoIdException;
+import com.acruent.college.globalexceptionhandle.NoRecordException;
 import com.acruent.college.repository.StudentBranchRepository;
 import com.acruent.college.repository.StudentRepository;
 import com.acruent.college.service.StudentService;
@@ -34,15 +37,15 @@ public class StudentServiceImpl implements StudentService {
 	    if (branch != null && branch.getId() != null) {
 	        Optional<StudentBranch> optionalBranch = studentBranchRepository.findById(branch.getId());
 	        if (optionalBranch.isEmpty()) {
-	            return "Branch with ID " + branch.getId() + " not found";
+	            return AppConstants.ID + branch.getId() + AppConstants.NOT_FOUND;
 	        }
 	        student.setBranch(optionalBranch.get());
 	    } else {
-	        return "Branch information is required";
+	        return AppConstants.INFORMATION_RER;
 	    }
 
 	    Student savedStudent = studentRepository.save(student);
-	    return "New Student Created Successfully: " + savedStudent.getId();
+	    return AppConstants.NEW_RECODE_ADD + savedStudent.getId();
 	}
 
 	@Override
@@ -55,7 +58,7 @@ public class StudentServiceImpl implements StudentService {
 		}
 		else
 		{
-		 throw new Exception("Thier Is No Id :"+id);
+		 throw new NoIdException(AppConstants.NO_RECORDES+id);
 		}
 	}
 
@@ -79,11 +82,11 @@ public class StudentServiceImpl implements StudentService {
 			updateStudent.setBranch(student.getBranch());
 			updateStudent.setUpdatedDate(student.getUpdatedDate());
 			studentRepository.save(updateStudent);
-			return "Update Student By Id :"+id;
+			return AppConstants.UPDATE_RECORDS+id;
 		}
 		else
 		{
-			 throw new Exception("Thir Is No Student :"+id);
+			 throw new NoRecordException(AppConstants.NO_RECORDES+id);
 
 		}
 		
@@ -96,10 +99,10 @@ public class StudentServiceImpl implements StudentService {
 		if(byId.isPresent())
 		{
 			studentRepository.deleteById(id);
-			return "Record Delete Success Fully :"+byId.get();
+			return AppConstants.DELETE_RECORD_BY_ID+byId.get();
 		}
 		
-		return "Thair Is No Record :"+byId.get();
+		return AppConstants.NO_RECORDES+byId.get();
 	}
 
 }

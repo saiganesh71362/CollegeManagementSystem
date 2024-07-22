@@ -4,6 +4,8 @@ import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.acruent.college.appconstants.AppConstants;
+
 @Configuration
 public class SwaggerConfiguaration {
 	
@@ -11,8 +13,8 @@ public class SwaggerConfiguaration {
 	public GroupedOpenApi controllerApi()
 	{
 	        return GroupedOpenApi.builder()
-	                .group("StudentManagement-Api")
-	                .packagesToScan("com.acruent.college.controller") // Specify the package to scan
+	                .group(AppConstants.STUDENT_MANAGEMENT)
+	                .packagesToScan(AppConstants.CONTROLLER_URL) // Specify the package to scan
 	                .build();
 	 }
 
