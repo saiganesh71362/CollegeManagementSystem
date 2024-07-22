@@ -5,8 +5,11 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.acruent.college.appconstants.AppConstants;
 import com.acruent.college.entity.CollegeNames;
 import com.acruent.college.entity.StudentBranch;
+import com.acruent.college.globalexceptionhandle.NoIdException;
+import com.acruent.college.globalexceptionhandle.NoRecordException;
 import com.acruent.college.repository.CollegeNamesRepsoitory;
 import com.acruent.college.repository.StudentBranchRepository;
 import com.acruent.college.service.StudentBranchService;
@@ -32,15 +35,15 @@ public class StudentBranchServiceImpl implements StudentBranchService {
 		if (college != null && college.getId() != null) {
 			Optional<CollegeNames> byId = collegeNamesRepsoitory.findById(college.getId());
 			if (byId.isEmpty()) {
-				return "College ID " + college.getId() + " not found";
+				return AppConstants.ID + college.getId() + AppConstants.NOT_FOUND;
 			}
 			studentBranch.setCollege(byId.get());
 		} else {
-			return "College information is required";
+			return AppConstants.INFORMATION_RER;
 		}
 
 		StudentBranch savedStudentBranch = studentBranchRepository.save(studentBranch);
-		return "New Branch Created Successfully: " + savedStudentBranch.getId();
+		return AppConstants.NEW_RECODE_ADD + savedStudentBranch.getId();
 	}
 
 	@Override
@@ -49,7 +52,7 @@ public class StudentBranchServiceImpl implements StudentBranchService {
 		if (byId.isPresent()) {
 			return byId.get();
 		} else
-			throw new Exception("Thir Is NO Recode" + byId.get());
+			throw new NoIdException(AppConstants.NO_RECORDES + byId.get());
 	}
 
 	@Override
@@ -69,17 +72,23 @@ public class StudentBranchServiceImpl implements StudentBranchService {
 			updateStudent.setUpdatedDate(studentBranch.getUpdatedDate());
 			studentBranchRepository.save(updateStudent);
 
-			return "Update Branch Success Fully :" + id;
+			return AppConstants.UPDATE_RECORDS + id;
 		} else {
-			throw new Exception("Their is No Id " + id);
+			throw new NoRecordException(AppConstants.NO_RECORDES + id);
 		}
 
 	}
 
 	@Override
-	public String deleteBranchById(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+	public String deleteBranchById(Integer id)
+	{
+		Optional<StudentBranch> byId = studentBranchRepository.findById(id);
+		if(byId.isPresent())
+		{
+			studentBranchRepository.deleteById(id);
+			return AppConstants.DELETE_RECORD_BY_ID+id;
+		}
+		return AppConstants.NO_RECORDES+id;
 	}
 
 }

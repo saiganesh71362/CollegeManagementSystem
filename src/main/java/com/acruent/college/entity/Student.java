@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -36,6 +38,7 @@ public class Student {
     @Column(name = "STUDENT_ADDRESS", nullable = false)
     private String address;
     
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "BRANCH_ID", nullable = false)
     private StudentBranch branch;

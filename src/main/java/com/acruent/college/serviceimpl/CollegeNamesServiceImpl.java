@@ -6,9 +6,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.acruent.college.appconstants.AppConstants;
 import com.acruent.college.entity.CollegeNames;
 import com.acruent.college.entity.Student;
 import com.acruent.college.entity.StudentBranch;
+import com.acruent.college.globalexceptionhandle.NoIdException;
+import com.acruent.college.globalexceptionhandle.NoRecordException;
 import com.acruent.college.repository.CollegeNamesRepsoitory;
 import com.acruent.college.service.CollegeNamesService;
 
@@ -38,7 +41,7 @@ public class CollegeNamesServiceImpl implements CollegeNamesService {
 		}
 
 		CollegeNames savedCollege = collegeNamesRepsoitory.save(collegeNames);
-		return "New College Created Successfully: " + savedCollege.getId();
+		return AppConstants.NEW_RECODE_ADD + savedCollege.getId();
 	}
 
 	@Override
@@ -49,7 +52,7 @@ public class CollegeNamesServiceImpl implements CollegeNamesService {
 			return byId.get();
 
 		} else {
-			throw new Exception("Thier Is No Records   :" + id);
+			throw new NoIdException(AppConstants.NO_RECORDES + id);  // Custom Exception Handle
 		}
 	}
 
@@ -71,10 +74,10 @@ public class CollegeNamesServiceImpl implements CollegeNamesService {
 			updateAccount.setBranches(collegeNames.getBranches());
 			updateAccount.setUpdatedDate(collegeNames.getUpdatedDate());
 			collegeNamesRepsoitory.save(updateAccount);
-			return " Update Record Success Fully :" + id;
+			return AppConstants.RECORD_ADD_SUCESSFULLY + id;
 
 		} else {
-			throw new Exception("Their Is No Record Id :" + id);
+			throw new NoRecordException(AppConstants.NO_RECORDS_ID + id);  // Custom Exception
 		}
 	}
 
@@ -83,10 +86,10 @@ public class CollegeNamesServiceImpl implements CollegeNamesService {
 		Optional<CollegeNames> byId = collegeNamesRepsoitory.findById(id);
 		if (byId.isPresent()) {
 			collegeNamesRepsoitory.deleteById(id);
-			return " Deleted Success By Id :" + id;
+			return AppConstants.DELETE_RECORD_BY_ID + id;
 		}
 
-		return "Thier Is No Records   :" + id;
+		return AppConstants.NO_RECORDES + id;
 	}
 
 }
